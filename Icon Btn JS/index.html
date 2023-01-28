@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Icon Button</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 250ms;
+      }
+
+      .parentDiv {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      .wrapper {
+        width: 100%;
+        max-width: 1080px;
+      }
+
+      h4 {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 20px;
+        font-family: "Open Sans", sans-serif;
+      }
+
+      /* Icon Button */
+
+      #icon__btn {
+        display: block;
+        margin: 20px auto;
+        border-width: 1px;
+        border-style: solid;
+        border-color: gray;
+        border-radius: 50px;
+        height: 50px;
+        width: 50px;
+        background-color: transparent;
+        position: relative;
+      }
+
+      #icon__btn:hover {
+        cursor: pointer;
+      }
+
+      .pseudo__bg {
+        content: "";
+        display: block;
+        background-color: rgb(211, 211, 211);
+        height: inherit;
+        width: inherit;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50px;
+        z-index: -1;
+        transform: translate(-50%, -50%) scale(0);
+        transition: 0.25s ease-in-out;
+        opacity: 0;
+      }
+
+      #icon__btn:hover .pseudo__bg {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      .mic__icon {
+        font-size: 25px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+
+      #icon__btn #stopIcon,
+      #icon__btn #recording__duration {
+        display: inline;
+        padding: 0 5px;
+        color: #ffffff;
+      }
+
+      #recording__duration {
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .recordBG__2 {
+        height: inherit;
+        width: inherit;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        background: #1c6ae8;
+        z-index: -1;
+        border-radius: 50px;
+        animation: recordOn2 0.6s ease-in alternate infinite;
+      }
+
+      @keyframes recordOn2 {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1);
+        }
+
+        100% {
+          opacity: 0.4;
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="parentDiv">
+      <div class="wrapper">
+        <h4>icon button</h4>
+
+        <button id="icon__btn">
+          <i class="mic__icon fa-solid fa-microphone" id="fa-microphone"></i>
+          <i id="stopIcon" class="fa-solid fa-stop"></i>
+          <p id="recording__duration">
+            <b><span id="m">00</span>:<span id="s">00</span></b>
+          </p>
+          <div class="pseudo__bg" id="pseudo__bg"></div>
+          <div class="recordBG__2" id="recordBG__2"></div>
+        </button>
+      </div>
+    </div>
+    <audio id="beep">
+      <source src="beep.mp3" type="audio/mpeg" />
+    </audio>
+    <script>
+      let active = false;
+      var timer;
+
+      const fa_microphone = document.getElementById("fa-microphone");
+      const stopIcon = document.getElementById("stopIcon");
+      const recording__duration = document.getElementById(
+        "recording__duration"
+      );
+      const recordBG__2 = document.getElementById("recordBG__2");
+
+      var minutesLabel = document.getElementById("m");
+      var secondsLabel = document.getElementById("s");
+      var totalSeconds = 0;
+
+      function pad(val) {
+        var valString = val + "";
+        if (valString.length < 2) {
+          return "0" + valString;
+        } else {
+          return valString;
+        }
+      }
+
+      var x = document.getElementById("beep");
+
+      function playAudio() {
+        x.play();
+      }
+
+      function setTime() {
+        ++totalSeconds;
+        secondsLabel.innerHTML = pad(totalSeconds % 60);
+        minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+      }
+
+      stopIcon.style.opacity = 0;
+      recording__duration.style.opacity = 0;
+      recordBG__2.style.display = "none";
+      icon__btn.style.borderColor = "#ccc";
+
+      function start() {
+        if (timer) {
+          clearInterval(timer);
+        }
+        playAudio();
+        timer = setInterval(setTime, 1000);
+      }
+
+      function stop() {
+        playAudio();
+        clearInterval(timer);
+      }
+
+      function activate() {
+        icon__btn.style.width = "100px";
+        icon__btn.style.background = "#1c6ae8";
+        icon__btn.style.color = "#FFFFFF";
+        fa_microphone.style.opacity = 0;
+        stopIcon.style.opacity = 1;
+        recording__duration.style.opacity = 1;
+        recordBG__2.style.display = "block";
+        icon__btn.style.borderColor = "transparent";
+        start();
+        active = true;
+      }
+
+      function deactivate() {
+        icon__btn.style.width = "50px";
+        icon__btn.style.background = "transparent";
+        icon__btn.style.color = "#000";
+        stopIcon.style.opacity = 0;
+        recording__duration.style.opacity = 0;
+        recordBG__2.style.display = "none";
+        fa_microphone.style.opacity = 1;
+        icon__btn.style.borderColor = "#ccc";
+        stop();
+        active = false;
+      }
+
+      icon__btn.onclick = function (e) {
+        if (active) {
+          deactivate();
+        } else {
+          activate();
+        }
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Split Icon</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 250ms;
+      }
+
+      .parentDiv {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      .wrapper {
+        width: 100%;
+        max-width: 1080px;
+      }
+
+      h4 {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 20px;
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .button {
+        max-width: 150px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .recordBG {
+        height: inherit;
+        width: inherit;
+        position: absolute;
+        inset: 0;
+        background: #1c69e8;
+        z-index: -1;
+        border-radius: 50px;
+        animation: recordOn 0.6s ease-in alternate infinite;
+      }
+
+      @keyframes recordOn {
+        100% {
+          opacity: 0.4;
+          transform: scale(1.075, 1.15);
+        }
+      }
+
+      #record__btn {
+        margin: 20px auto;
+        background-color: transparent;
+        border-width: 1px;
+        border-style: solid;
+        border-color: gray;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        width: 100%;
+        border-radius: 50px;
+        transition: all 0.5s;
+        color: #222;
+      }
+
+      #record__btn:hover {
+        cursor: pointer;
+      }
+
+      .record__btn:hover .mic {
+        background-color: lightgrey;
+      }
+
+      #record__btn i {
+        font-size: 25px;
+      }
+
+      .mic {
+        border-radius: 50px 0 0 50px;
+        flex: 1.5;
+        transition: 0.5s;
+        padding: 15px 5px;
+        position: relative;
+      }
+
+      .mic-after {
+        width: 1px;
+        height: 25px;
+        background-color: grey;
+        position: absolute;
+        top: 50%;
+        right: 0%;
+        transform: translateY(-50%);
+      }
+
+      .arrow__down {
+        padding: 15px 5px;
+        flex: 1;
+        transition: 0.5s;
+        position: relative;
+      }
+
+      .tooltips:before {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: #121212;
+        position: absolute;
+        top: -15%;
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+        transition: all 0.5s;
+      }
+
+      .tooltips {
+        font-family: "Open Sans", sans-serif;
+        padding: 10px 15px;
+        border-radius: 15px;
+        color: white;
+        background-color: #121212;
+        text-transform: capitalize;
+        font-size: 15px;
+        position: absolute;
+        bottom: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        opacity: 0;
+        transition: all 0.5s;
+      }
+
+      #record__btn:hover .tooltips {
+        opacity: 1;
+      }
+
+      .stopIcon {
+        font-size: 25px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+      }
+
+      .recording__duration {
+        font-family: "Open Sans", sans-serif;
+        font-size: 16px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parentDiv">
+      <div class="wrapper">
+        <h4>split button</h4>
+        <div class="button">
+          <button id="record__btn" class="record__btn">
+            <div class="mic" id="divA">
+              <i class="fa-solid fa-microphone" id="fa-microphone"></i
+              ><span class="tooltips" id="tooltips">opneman</span>
+              <i class="stopIcon fa-solid fa-stop" id="stopIcon"></i>
+              <div class="mic-after" id="mic-after"></div>
+            </div>
+            <div class="arrow__down" id="divB">
+              <i class="fa-solid fa-chevron-down" id="fa-chevron-down"></i>
+              <p class="recording__duration" id="recording__duration">
+                <b><span id="m">00</span>:<span id="s">00</span></b>
+              </p>
+            </div>
+          </button>
+          <div class="recordBG" id="recordBG"></div>
+        </div>
+      </div>
+    </div>
+    <audio id="beep">
+      <source src="beep.mp3" type="audio/mpeg" />
+    </audio>
+    <script>
+      let active = false;
+      var timer;
+
+      const fa_microphone = document.getElementById("fa-microphone");
+      const stopIcon = document.getElementById("stopIcon");
+      const recording__duration = document.getElementById(
+        "recording__duration"
+      );
+      const fa_chevron_down = document.getElementById("fa-chevron-down");
+      const recordBG = document.getElementById("recordBG");
+      const tooltips = document.getElementById("tooltips");
+      const record__btn = document.getElementById("record__btn");
+      const divA = document.getElementById("divA");
+      const divB = document.getElementById("divB");
+      const mic_after = document.getElementById("mic-after");
+
+      stopIcon.style.opacity = 0;
+      recording__duration.style.opacity = 0;
+      recordBG.style.display = "none";
+      divA.style.flex = 1.5;
+      divB.style.flex = 1;
+      record__btn.style.borderColor = "#ccc";
+      mic_after.style.backgroundColor = "#ccc";
+
+      var minutesLabel = document.getElementById("m");
+      var secondsLabel = document.getElementById("s");
+      var totalSeconds = 0;
+
+      function pad(val) {
+        var valString = val + "";
+        if (valString.length < 2) {
+          return "0" + valString;
+        } else {
+          return valString;
+        }
+      }
+
+      var x = document.getElementById("beep");
+
+      function playAudio() {
+        x.play();
+      }
+
+      function setTime() {
+        ++totalSeconds;
+        secondsLabel.innerHTML = pad(totalSeconds % 60);
+        minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+      }
+
+      function start() {
+        if (timer) {
+          clearInterval(timer);
+        }
+        playAudio();
+        timer = setInterval(setTime, 1000);
+      }
+
+      function stop() {
+        playAudio();
+        clearInterval(timer);
+      }
+
+      function activate() {
+        stopIcon.style.opacity = 1;
+        recording__duration.style.opacity = 1;
+        recordBG.style.display = "block";
+        fa_microphone.style.opacity = 0;
+        fa_chevron_down.style.opacity = 0;
+        record__btn.style.background = "#1c69e8";
+        record__btn.classList.remove("record__btn");
+        tooltips.style.display = "none";
+        divA.style.flex = 1;
+        divB.style.flex = 1.5;
+        record__btn.style.borderColor = "transparent";
+        mic_after.style.backgroundColor = "#fff";
+        start();
+        active = true;
+      }
+
+      function deactivate() {
+        stopIcon.style.opacity = 0;
+        recording__duration.style.opacity = 0;
+        recordBG.style.display = "none";
+        fa_microphone.style.opacity = 1;
+        fa_chevron_down.style.opacity = 1;
+        record__btn.style.background = "transparent";
+        record__btn.classList.add("record__btn");
+        tooltips.style.display = "block";
+        divA.style.flex = 1.5;
+        divB.style.flex = 1;
+        record__btn.style.borderColor = "#ccc";
+        mic_after.style.backgroundColor = "#ccc";
+        stop();
+        active = false;
+      }
+
+      record__btn.onclick = function (e) {
+        if (active) {
+          deactivate();
+        } else {
+          activate();
+        }
+      };
+    </script>
+  </body>
+</html>

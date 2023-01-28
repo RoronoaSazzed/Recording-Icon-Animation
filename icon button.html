@@ -17,7 +17,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Recording Icon Animation</title>
+    <title>Icon Button</title>
 
     <style>
       * {
@@ -43,135 +43,6 @@
         letter-spacing: 1px;
         font-size: 20px;
         font-family: "Open Sans", sans-serif;
-      }
-
-      .button {
-        max-width: 150px;
-        margin: 0 auto;
-        position: relative;
-      }
-
-      .recordBG {
-        height: inherit;
-        width: inherit;
-        position: absolute;
-        inset: 0;
-        background: #1c69e8;
-        z-index: -1;
-        border-radius: 50px;
-        animation: recordOn 0.6s ease-in alternate infinite;
-      }
-
-      @keyframes recordOn {
-        100% {
-          opacity: 0.4;
-          transform: scale(1.075, 1.15);
-        }
-      }
-
-      #record__btn {
-        margin: 20px auto;
-        background-color: transparent;
-        border: 1px solid grey;
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        width: 100%;
-        border-radius: 50px;
-        transition: all 0.5s;
-      }
-
-      #record__btn:hover {
-        cursor: pointer;
-      }
-
-      #record__btn:hover .mic {
-        background-color: lightgrey;
-      }
-
-      #record__btn i {
-        font-size: 25px;
-      }
-
-      .mic {
-        border-radius: 50px 0 0 50px;
-        flex: 1.5;
-        transition: 0.5s;
-        padding: 15px 5px;
-        position: relative;
-      }
-
-      .mic::after {
-        content: "";
-        display: block;
-        width: 1px;
-        height: 25px;
-        background-color: grey;
-        position: absolute;
-        top: 50%;
-        right: 0%;
-        transform: translateY(-50%);
-      }
-
-      .arrow__down {
-        padding: 15px 5px;
-        flex: 1;
-        transition: 0.5s;
-        position: relative;
-      }
-
-      .tooltips:before {
-        content: "";
-        display: block;
-        width: 20px;
-        height: 20px;
-        background-color: #121212;
-        position: absolute;
-        top: -15%;
-        left: 50%;
-        transform: translateX(-50%) rotate(45deg);
-        transition: all 0.5s;
-      }
-
-      .tooltips {
-        font-family: "Open Sans", sans-serif;
-        padding: 10px 15px;
-        border-radius: 15px;
-        color: white;
-        background-color: #121212;
-        text-transform: capitalize;
-        font-size: 15px;
-        position: absolute;
-        bottom: -60px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-        opacity: 0;
-        transition: all 0.5s;
-      }
-
-      #record__btn:hover .tooltips {
-        opacity: 1;
-      }
-
-      .stopIcon {
-        font-size: 25px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: red;
-      }
-
-      .recording__duration {
-        font-family: "Open Sans", sans-serif;
-        font-size: 16px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: red;
       }
 
       /* Icon Button */
@@ -260,22 +131,6 @@
   <body>
     <div class="parentDiv">
       <div class="wrapper">
-        <h4>split button</h4>
-        <div class="button">
-          <button id="record__btn">
-            <div class="mic">
-              <i class="fa-solid fa-microphone"></i
-              ><span class="tooltips">opneman</span>
-              <i class="stopIcon fa-solid fa-stop"></i>
-            </div>
-            <div class="arrow__down">
-              <i class="fa-solid fa-chevron-down"></i>
-              <p class="recording__duration"><b>00:00</b></p>
-            </div>
-          </button>
-          <div class="recordBG"></div>
-        </div>
-
         <h4>icon button</h4>
 
         <button id="icon__btn">
