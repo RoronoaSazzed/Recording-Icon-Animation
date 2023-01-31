@@ -132,6 +132,51 @@
           transform: translate(-50%, -50%) scale(1.1);
         }
       }
+
+      .process {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transform-style: preserve-3d;
+        perspective: 100px;
+      }
+
+      .loader {
+        width: 5px;
+        height: 35px;
+        transform: scaleY(0.2);
+        transform-origin: center;
+        background-color: #fff;
+        display: inline-block;
+        animation: process 1s ease-in-out infinite alternate;
+      }
+
+      .l1 {
+        animation-delay: 0.1s;
+      }
+
+      .l2 {
+        animation-delay: 0.2s;
+      }
+
+      .l3 {
+        animation-delay: 0.3s;
+      }
+
+      .l4 {
+        animation-delay: 0.4s;
+      }
+
+      .l5 {
+        animation-delay: 0.5s;
+      }
+
+      @keyframes process {
+        100% {
+          transform: scaleY(1);
+        }
+      }
     </style>
   </head>
 
@@ -148,6 +193,14 @@
           </p>
           <div class="pseudo__bg" id="pseudo__bg"></div>
           <div class="recordBG__2" id="recordBG__2"></div>
+
+          <div class="process" id="loader">
+            <div class="loader l1"></div>
+            <div class="loader l2"></div>
+            <div class="loader l3"></div>
+            <div class="loader l4"></div>
+            <div class="loader l5"></div>
+          </div>
         </button>
       </div>
     </div>
@@ -164,6 +217,7 @@
         "recording__duration"
       );
       const recordBG__2 = document.getElementById("recordBG__2");
+      const loader = document.getElementById("loader");
 
       var minutesLabel = document.getElementById("m");
       var secondsLabel = document.getElementById("s");
@@ -194,6 +248,7 @@
       recording__duration.style.opacity = 0;
       recordBG__2.style.display = "none";
       icon__btn.style.borderColor = "#ccc";
+      loader.style.opacity = 0;
 
       function start() {
         if (timer) {
@@ -222,16 +277,20 @@
       }
 
       function deactivate() {
-        icon__btn.style.width = "50px";
-        icon__btn.style.background = "transparent";
-        icon__btn.style.color = "#000";
+        loader.style.opacity = 1;
         stopIcon.style.opacity = 0;
         recording__duration.style.opacity = 0;
         recordBG__2.style.display = "none";
-        fa_microphone.style.opacity = 1;
         icon__btn.style.borderColor = "#ccc";
         stop();
-        active = false;
+        setTimeout(() => {
+          icon__btn.style.width = "50px";
+          icon__btn.style.background = "transparent";
+          icon__btn.style.color = "#000";
+          loader.style.opacity = 0;
+          fa_microphone.style.opacity = 1;
+          active = false;
+        }, "1000");
       }
 
       icon__btn.onclick = function (e) {

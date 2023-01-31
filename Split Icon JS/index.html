@@ -177,6 +177,51 @@
         transform: translate(-50%, -50%);
         color: #fff;
       }
+
+      .process {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transform-style: preserve-3d;
+        perspective: 100px;
+      }
+
+      .loader {
+        width: 5px;
+        height: 35px;
+        transform: scaleY(0.2);
+        transform-origin: center;
+        background-color: #fff;
+        display: inline-block;
+        animation: process 1s ease-in-out infinite alternate;
+      }
+
+      .l1 {
+        animation-delay: 0.1s;
+      }
+
+      .l2 {
+        animation-delay: 0.2s;
+      }
+
+      .l3 {
+        animation-delay: 0.3s;
+      }
+
+      .l4 {
+        animation-delay: 0.4s;
+      }
+
+      .l5 {
+        animation-delay: 0.5s;
+      }
+
+      @keyframes process {
+        100% {
+          transform: scaleY(1);
+        }
+      }
     </style>
   </head>
   <body>
@@ -199,6 +244,14 @@
             </div>
           </button>
           <div class="recordBG" id="recordBG"></div>
+
+          <div class="process" id="loader">
+            <div class="loader l1"></div>
+            <div class="loader l2"></div>
+            <div class="loader l3"></div>
+            <div class="loader l4"></div>
+            <div class="loader l5"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -221,6 +274,7 @@
       const divA = document.getElementById("divA");
       const divB = document.getElementById("divB");
       const mic_after = document.getElementById("mic-after");
+      const loader = document.getElementById("loader");
 
       stopIcon.style.opacity = 0;
       recording__duration.style.opacity = 0;
@@ -229,6 +283,7 @@
       divB.style.flex = 1;
       record__btn.style.borderColor = "#ccc";
       mic_after.style.backgroundColor = "#ccc";
+      loader.style.opacity = 0;
 
       var minutesLabel = document.getElementById("m");
       var secondsLabel = document.getElementById("s");
@@ -286,20 +341,25 @@
       }
 
       function deactivate() {
+        loader.style.opacity = 1;
         stopIcon.style.opacity = 0;
         recording__duration.style.opacity = 0;
         recordBG.style.display = "none";
-        fa_microphone.style.opacity = 1;
-        fa_chevron_down.style.opacity = 1;
-        record__btn.style.background = "transparent";
-        record__btn.classList.add("record__btn");
         tooltips.style.display = "block";
         divA.style.flex = 1.5;
         divB.style.flex = 1;
-        record__btn.style.borderColor = "#ccc";
-        mic_after.style.backgroundColor = "#ccc";
+        mic_after.style.backgroundColor = "transparent";
         stop();
-        active = false;
+        setTimeout(() => {
+          mic_after.style.backgroundColor = "#ccc";
+          record__btn.style.borderColor = "#ccc";
+          fa_chevron_down.style.opacity = 1;
+          record__btn.classList.add("record__btn");
+          fa_microphone.style.opacity = 1;
+          record__btn.style.background = "transparent";
+          loader.style.opacity = 0;
+          active = false;
+        }, "1000");
       }
 
       record__btn.onclick = function (e) {
